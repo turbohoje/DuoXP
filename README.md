@@ -90,16 +90,7 @@ This software uses the following open source packages:
 - [Selenium](https://www.selenium.dev/)
 
 ## Support
-
-<a href="https://paypal.com/" target="_blank">
-  <img src="https://raw.githubusercontent.com/JohnnyDoer/DuoXP/main/app/icons8-paypal-240.png" width="200px" alt="Paytm">
-</a>
-
-
-<!-- <p>OR</p>
-<a href="https://paytm.com/" target="_blank">
-  <img src="https://raw.githubusercontent.com/JohnnyDoer/DuoXP/main/app/icons8-paytm-240.png" alt="Paytm" width="200px height="120px">
-</a> -->
+Visit https://github.com/JohnnyDoer/DuoXP, i just fixed some broken stuff after a website update
 
 
 ## You may also like...
