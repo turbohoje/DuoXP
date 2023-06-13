@@ -2,6 +2,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, StaleElementReferenceException
+import re
 
 # Other imports.
 import time
@@ -26,230 +27,198 @@ class Duolingo:
     def loginDuo(self, username, password):
         driver = self.driver
         driver.get("https://www.duolingo.com/?isLoggingIn=true")
-        time.sleep(3)
+        time.sleep(2)
 
         # Hardcoded XPaths.
         driver.find_element_by_xpath(
-            '/html/body/div[1]/div[1]/div/div[2]/div[1]/div[2]/div[2]/button').click()
+            '//*[@id="root"]/div[1]/header/div[2]/div[2]/div/button').click()
         time.sleep(1)
 
         # Insertinf credentials.
         driver.find_element_by_xpath(
-            '/html/body/div[2]/div[2]/div/div/form/div[1]/div[1]/div[1]/label/div/input').send_keys(username)
+            '//*[@id="overlays"]/div[3]/div/div/form/div[1]/div[1]/div[1]/input').send_keys(username)
         driver.find_element_by_xpath(
-            '/html/body/div[2]/div[2]/div/div/form/div[1]/div[1]/div[2]/label/div[1]/input').send_keys(password)
-        driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div/form/div[1]/button').click()
+            '//*[@id="overlays"]/div[3]/div/div/form/div[1]/div[1]/div[2]/input').send_keys(password)
+        driver.find_element_by_xpath('//*[@id="overlays"]/div[3]/div/div/form/div[1]/button').click()
         time.sleep(5)
 
-    def autoXP(self, sents):
+    def autoXP(self):
         driver = self.driver
 
+
+        driver.get("https://www.duolingo.com/lesson/unit/30/level/4")
+        time.sleep(4)
         try:
-            driver.get("https://www.duolingo.com/skill/de/Flirting/practice")
-            time.sleep(10)
-            try:
-                driver.find_element_by_xpath(
-                    "/html/body/div[1]/div/div/div/div/div[2]/div/div/div/button").click()
-                time.sleep(1)
-            except:
-                pass
-            while True:
-                words = driver.find_elements_by_xpath("//button[@data-test='challenge-tap-token']")
-                word_text = []
-                for i in words:
-                    word_text.append(i.text)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div/div[3]/button').click()
+            time.sleep(1)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(2)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(2)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(2)
+            #novio button
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[7]/div/div[2]/div/span[13]/button').click()
+            time.sleep(1)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            #phrase
+            a = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[11]/div/ul/li[1]/button')
+            b = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[11]/div/ul/li[2]/button')
+            c = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[11]/div/ul/li[3]/button')
 
-                for i in sents:
-                    if sorted(word_text) == sorted(i):
-                        for a in i:
-                            for b in words:
-                                if a == b.text:
-                                    b.click()
-                                    words.remove(b)
-                                    break
-                        break
 
-                driver.find_element_by_xpath("//button[@data-test='player-next']").click()
-                time.sleep(1)
-                driver.find_element_by_xpath("//button[@data-test='player-next']").click()
-                time.sleep(2)
+            if a.text == "Estoy muy emocionada":
+                a.click()
+            elif b.text == "Estoy muy emocionada":
+                b.click()
+            elif c.text == "Estoy muy emocionada":
+                c.click()
 
+            for i in range(1, 7):
+                print(i)
+                driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+                time.sleep(4)
+
+            # #propose coice
+            a = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[17]/div/ul/li[1]')
+            b = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[17]/div/ul/li[2]')
+            c = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[17]/div/ul/li[3]')
+
+            print(a.text)
+            print(b.text)
+            print(c.text)
+
+            if a.text == "…propose to her boyfriend this weekend.":
+                a.click()
+            elif b.text == "…propose to her boyfriend this weekend.":
+                b.click()
+            elif c.text == "…propose to her boyfriend this weekend.":
+                c.click()
+
+            for i in range(1, 7):
+                print(i)
+                driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+                time.sleep(4)
+
+            a = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[25]/div/ul/li[1]/button')
+            b = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[25]/div/ul/li[2]/button')
+            c = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[25]/div/ul/li[3]/button')
+
+            if a.text == "Ya conoces a":
+                a.click()
+            elif b.text == "Ya conoces a":
+                b.click()
+            elif c.text == "Ya conoces a":
+                c.click()
+
+            for i in range(1, 6):
+                print(i)
+                driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+                time.sleep(4)
+
+            a = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[30]/div/ul/li[1]')
+            b = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[30]/div/ul/li[2]')
+            c = driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[30]/div/ul/li[3]')
+
+            print(a.text)
+            print(b.text)
+            print(c.text)
+
+            if a.text == "…that his girlfriend is going to propose to him.":
+                a.click()
+            elif b.text == "…that his girlfriend is going to propose to him.":
+                b.click()
+            elif c.text == "…that his girlfriend is going to propose to him.":
+                c.click()
+            else:
+                print("no match")
+
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+
+            l = []
+            r = []
+            #end buttons
+            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[1]/button'))
+            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[2]/button'))
+            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[3]/button'))
+            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[4]/button'))
+            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[5]/button'))
+
+            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[1]/button'))
+            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[2]/button'))
+            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[3]/button'))
+            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[4]/button'))
+            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[5]/button'))
+
+            phrases = {
+                "with" : "con",
+                "so" : "tan",
+                "really" : "de verdad",
+                "boyfriend" : "novio",
+                "to meet" : "conocer",
+                "I am waiting for": "estoy esperando",
+                "interesting": "interesante",
+                "nice to meet you" : "mucho gusto",
+                "friend" : "amiga",
+                "she's going to come" : "va a venir",
+                "already":"ya",
+                "to propose":"pedir matrimonio",
+                "park":"parque",
+                "weekend":"fin de semana",
+                "romantic":"romántico"
+            }
+
+            for i in l:
+                ik = re.sub('^\d\\n', '', i.text)
+                print("examining " + ik)
+                for j in r:
+                    jk = re.sub('^\d\\n', '', j.text)
+                    print("comparing " + jk)
+                    if jk == phrases[ik]:
+                        i.click()
+                        j.click()
+                        print("match")
+                        time.sleep(1)
+
+            time.sleep(8)
+            print("done1")
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div[2]/div/button').click()
+            time.sleep(8)
+            print("done2")
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[2]/div/div/div/button').click()
+            time.sleep(8)
+            print("done3 ending")
         # Debugging code.
 
         # except:
         #     pass
         except ElementClickInterceptedException:
-            print("Done")
+            print("Done CIE")
         except NoSuchElementException:
-            print("Ok")
+            print("Ok nse")
         except StaleElementReferenceException:
-            print("Ok")
+            print("Ok stale")
+        except KeyError:
+            print("Key error")
+        except UnexpectedAlertPresentException:
+            print("do nothing")
 
 
 Duo = Duolingo()
 Duo.loginDuo(username, password)
 
-# Duolingo data
-idiom_sents = [
-    ['It', 'is', 'raining', 'cats', 'and', 'dogs'],
-    ['Chin', 'up'],
-    ['Out', 'of', 'sight', ',', 'out', 'of', 'mind'],
-    ['Every', 'dog', 'has', 'its', 'day'],
-    ['The', 'pen', 'is', 'mightier', 'than', 'the', 'sword'],
-    ['He', 'is', 'known', 'all', 'over', 'town'],
-    ['That', 'is', 'yesterday', '\'s', 'news'],
-    ['Laughter', 'is', 'the', 'best', 'medicine'],
-    ['I', '’ll', 'keep', 'my', 'fingers', 'crossed', 'for', 'you'],
-    ['German', 'is', 'hard'],
-    ['Too', 'many', 'cooks', 'spoil', 'the', 'broth'],
-    ['The', 'straw', 'that', 'breaks', 'the', 'camel', '\'s', 'back'],
-    ['Practice', 'makes', 'perfect'],
-    ['All', '\'s', 'well', 'that', 'ends', 'well']
-]
-
-flirt_sents = [
-    ["I", "think", "you", "are", "nice"],
-    ["I", "am", "new", "here", ",", "and", "you"],
-    ["I", "would", "like", "to", "get", "to", "know", "you", "better"],
-    ["I", "think", "you", "'re", "cute"],
-    ["Do", "you", "want", "to", "dance"],
-    ["The", "coffee", "is", "on", "me"],
-    ["You", "look", "like", "my", "next", "girlfriend"],
-    ["May", "I", "kiss", "you"],
-    ["Your", "eyes", "are", "like", "stars"],
-    ["May", "I", "invite", "you", "to", "dinner"],
-    ["Can", "I", "call", "you"],
-    ["You", "are", "funny"],
-    ["You", "are", "smart"],
-    ["Can", "I", "order", "you", "a", "drink"],
-    ["I", "love", "you"],
-    ["I", "like", "you"],
-    ["You", "can", "dance", "well"],
-    ["I", "have", "fallen", "in", "love", "with", "you"],
-    ["Do", "you", "want", "to", "go", "out", "with", "me"],
-
-]
-
 while True:
-    Duo.autoXP(flirt_sents)
-
-        chrome_options = webdriver.ChromeOptions()
-
-        # Comment the line below to switch OFF incognito mode.
-        chrome_options.add_argument("--incognito")
-        # Uncomment the line below to not open a browser window.
-        # chrome_options.add_argument("--headless")
-        self.driver = webdriver.Chrome(options=chrome_options)
-
-    def closeBrowser(self):
-        self.driver.close()
-
-    def loginDuo(self, username, password):
-        driver = self.driver
-        driver.get("https://www.duolingo.com/?isLoggingIn=true")
-        time.sleep(3)
-
-        # Hardcoded XPaths.
-        driver.find_element_by_xpath(
-            '/html/body/div[1]/div[1]/div/div[2]/div[1]/div[2]/div[2]/button').click()
-        time.sleep(1)
-
-        # Insertinf credentials.
-        driver.find_element_by_xpath(
-            '/html/body/div[2]/div[2]/div/div/form/div[1]/div[1]/div[1]/label/div/input').send_keys(username)
-        driver.find_element_by_xpath(
-            '/html/body/div[2]/div[2]/div/div/form/div[1]/div[1]/div[2]/label/div[1]/input').send_keys(password)
-        driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div/form/div[1]/button').click()
-        time.sleep(5)
-
-    def autoXP(self, sents):
-        driver = self.driver
-
-        try:
-            driver.get("https://www.duolingo.com/skill/de/Flirting/practice")
-            time.sleep(10)
-            try:
-                driver.find_element_by_xpath(
-                    "/html/body/div[1]/div/div/div/div/div[2]/div/div/div/button").click()
-                time.sleep(1)
-            except:
-                pass
-            while True:
-                words = driver.find_elements_by_xpath("//button[@data-test='challenge-tap-token']")
-                word_text = []
-                for i in words:
-                    word_text.append(i.text)
-
-                for i in sents:
-                    if sorted(word_text) == sorted(i):
-                        for a in i:
-                            for b in words:
-                                if a == b.text:
-                                    b.click()
-                                    words.remove(b)
-                                    break
-                        break
-
-                driver.find_element_by_xpath("//button[@data-test='player-next']").click()
-                time.sleep(1)
-                driver.find_element_by_xpath("//button[@data-test='player-next']").click()
-                time.sleep(2)
-
-        # Debugging code.
-
-        # except:
-        #     pass
-        except ElementClickInterceptedException:
-            print("Done")
-        except NoSuchElementException:
-            print("Ok")
-        except StaleElementReferenceException:
-            print("Ok")
-
-
-Duo = Duolingo()
-Duo.loginDuo(username, password)
-
-# Duolingo data
-idiom_sents = [
-    ['It', 'is', 'raining', 'cats', 'and', 'dogs'],
-    ['Chin', 'up'],
-    ['Out', 'of', 'sight', ',', 'out', 'of', 'mind'],
-    ['Every', 'dog', 'has', 'its', 'day'],
-    ['The', 'pen', 'is', 'mightier', 'than', 'the', 'sword'],
-    ['He', 'is', 'known', 'all', 'over', 'town'],
-    ['That', 'is', 'yesterday', '\'s', 'news'],
-    ['Laughter', 'is', 'the', 'best', 'medicine'],
-    ['I', '’ll', 'keep', 'my', 'fingers', 'crossed', 'for', 'you'],
-    ['German', 'is', 'hard'],
-    ['Too', 'many', 'cooks', 'spoil', 'the', 'broth'],
-    ['The', 'straw', 'that', 'breaks', 'the', 'camel', '\'s', 'back'],
-    ['Practice', 'makes', 'perfect'],
-    ['All', '\'s', 'well', 'that', 'ends', 'well']
-]
-
-flirt_sents = [
-    ["I", "think", "you", "are", "nice"],
-    ["I", "am", "new", "here", ",", "and", "you"],
-    ["I", "would", "like", "to", "get", "to", "know", "you", "better"],
-    ["I", "think", "you", "'re", "cute"],
-    ["Do", "you", "want", "to", "dance"],
-    ["The", "coffee", "is", "on", "me"],
-    ["You", "look", "like", "my", "next", "girlfriend"],
-    ["May", "I", "kiss", "you"],
-    ["Your", "eyes", "are", "like", "stars"],
-    ["May", "I", "invite", "you", "to", "dinner"],
-    ["Can", "I", "call", "you"],
-    ["You", "are", "funny"],
-    ["You", "are", "smart"],
-    ["Can", "I", "order", "you", "a", "drink"],
-    ["I", "love", "you"],
-    ["I", "like", "you"],
-    ["You", "can", "dance", "well"],
-    ["I", "have", "fallen", "in", "love", "with", "you"],
-    ["Do", "you", "want", "to", "go", "out", "with", "me"],
-
-]
-
-while True:
-    Duo.autoXP(flirt_sents)
+    Duo.autoXP()

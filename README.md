@@ -9,6 +9,7 @@
 
 <h4 align="center">A <a href="https://www.selenium.dev/" target="_blank">Selenium</a> Bot to automatically get XP in <a href="https://www.duolingo.com/" target="_blank">Duolingo</a>.</h4>
 
+Originally from https://github.com/JohnnyDoer/DuoXP
 <p align="center">
   <a href="https://github.com/JohnnyDoer/DuoXP/blob/main/LICENSE" target="_blank">
     <img src="https://raw.githubusercontent.com/JohnnyDoer/DuoXP/main/app/license.svg" alt="GitHub license">
