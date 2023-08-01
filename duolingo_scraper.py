@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Selenium imports.
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -50,23 +51,24 @@ class Duolingo:
         time.sleep(4)
         try:
             driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div/div[3]/button').click()
-            time.sleep(1)
-            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
             time.sleep(2)
             driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
             time.sleep(2)
             driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
-            time.sleep(4)
-            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
-            time.sleep(4)
-            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
-            time.sleep(4)
-            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
-            time.sleep(4)
-            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
             time.sleep(2)
-            #novio button
-            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[7]/div/div[2]/div/span[13]/button').click()
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(4)
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
+            time.sleep(3)
+            print("novio button")
+            #novio button                 /html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[7]/div/div[2]/div/span[13]/span/button
+            driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[7]/div/div[2]/div/span[13]/span/button').click()
             time.sleep(1)
             driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
             time.sleep(4)
@@ -150,18 +152,18 @@ class Duolingo:
 
             l = []
             r = []
-            #end buttons
-            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[1]/button'))
-            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[2]/button'))
-            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[3]/button'))
-            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[4]/button'))
-            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[5]/button'))
+            #end buttons                           /html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[1]/span/button
+            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[1]/span/button'))
+            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[2]/span/button'))
+            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[3]/span/button'))
+            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[4]/span/button'))
+            l.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[1]/li[5]/span/button'))
 
-            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[1]/button'))
-            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[2]/button'))
-            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[3]/button'))
-            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[4]/button'))
-            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[5]/button'))
+            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[1]/span/button'))
+            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[2]/span/button'))
+            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[3]/span/button'))
+            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[4]/span/button'))
+            r.append(driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[31]/div/div[2]/div/ul[2]/li[5]/span/button'))
 
             phrases = {
                 "with" : "con",
@@ -200,7 +202,14 @@ class Duolingo:
             print("done2")
             driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[2]/div/div/div/button').click()
             time.sleep(8)
-            print("done3 ending")
+            print("done3")
+            try:
+                for i in range(1, 3):
+                    driver.find_element_by_xpath('/html/body/div[1]/div[1]/div/div/div[2]/div/div/div/button').click()
+                    time.sleep(8)
+                    print("final %i", i)
+            except:
+                print("occasional extra screen")
         # Debugging code.
 
         # except:
@@ -215,6 +224,8 @@ class Duolingo:
             print("Key error")
         except UnexpectedAlertPresentException:
             print("do nothing")
+        except UnexpectedAlertPresentException:
+            print("weird")
 
 
 Duo = Duolingo()
