@@ -41,13 +41,14 @@ class Duolingo:
         driver.find_element("xpath", 
             '//*[@id="overlays"]/div[3]/div/div/form/div[1]/div[1]/div[2]/input').send_keys(password)
         driver.find_element("xpath", '//*[@id="overlays"]/div[3]/div/div/form/div[1]/button').click()
-        time.sleep(5)
+        time.sleep(18)
 
     def autoXP(self):
         driver = self.driver
 
 
-        driver.get("https://www.duolingo.com/lesson/unit/30/level/4")
+        #driver.get("https://www.duolingo.com/lesson/unit/30/level/4")
+        driver.get("https://www.duolingo.com/lesson/unit/23/level/2")
         time.sleep(4)
         try:
             driver.find_element("xpath", '/html/body/div[1]/div[1]/div/div/div/div[3]/button').click()
