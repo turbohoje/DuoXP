@@ -37,10 +37,10 @@ class Duolingo:
 
         # Insertinf credentials.
         driver.find_element("xpath", 
-            '//*[@id="overlays"]/div[3]/div/div/form/div[1]/div[1]/div[1]/input').send_keys(username)
+            '/html/body/div[2]/div[3]/div/div/form/div[1]/div[1]/div[1]/div[1]/input').send_keys(username)
         driver.find_element("xpath", 
-            '//*[@id="overlays"]/div[3]/div/div/form/div[1]/div[1]/div[2]/input').send_keys(password)
-        driver.find_element("xpath", '//*[@id="overlays"]/div[3]/div/div/form/div[1]/button').click()
+            '/html/body/div[2]/div[3]/div/div/form/div[1]/div[1]/div[2]/div[1]/input').send_keys(password)
+        driver.find_element("xpath", '/html/body/div[2]/div[3]/div/div/form/div[1]/button').click()
         time.sleep(18)
 
     def autoXP(self):
