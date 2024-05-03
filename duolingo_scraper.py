@@ -46,7 +46,7 @@ class Duolingo:
     def autoXP(self):
         driver = self.driver
 
-        driver.get("https://www.duolingo.com/lesson/unit/22/level/7")
+        driver.get("https://www.duolingo.com/lesson/unit/37/level/2")
         time.sleep(4)
         try:
             driver.find_element("xpath", '/html/body/div[1]/div[1]/div/div/div/div[3]/button').click()
