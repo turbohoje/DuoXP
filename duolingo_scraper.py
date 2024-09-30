@@ -232,3 +232,4 @@ Duo.loginDuo(username, password)
 
 while True:
     Duo.autoXP()
+    time.sleep(2000)
