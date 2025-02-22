@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Selenium imports.
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -18,6 +18,8 @@ class Duolingo:
 
         # Comment the line below to switch OFF incognito mode.
         chrome_options.add_argument("--incognito")
+        #chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--mute-audio")
         # Uncomment the line below to not open a browser window.
         # chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=chrome_options)
@@ -26,6 +28,9 @@ class Duolingo:
         self.driver.close()
 
     def loginDuo(self, username, password):
+        print("logging in ")
+        print(username)
+        print(password)
         driver = self.driver
         driver.get("https://www.duolingo.com/?isLoggingIn=true")
         time.sleep(2)
@@ -41,7 +46,21 @@ class Duolingo:
         driver.find_element("xpath", 
             '/html/body/div[2]/div[3]/div/div/form/div[1]/div[1]/div[2]/div[1]/input').send_keys(password)
         driver.find_element("xpath", '/html/body/div[2]/div[3]/div/div/form/div[1]/button').click()
-        time.sleep(18)
+        time.sleep(2)
+        #<div data-test="invalid-form-field" class="_3_sm4 y2XzX">Wrong password. Please try again.</div>
+        #/html/body/div[2]/div[3]/div/div/form/div[1]/div[2]/div
+        try:
+            a = driver.find_element("xpath", '/html/body/div[2]/div[3]/div/div/form/div[1]/div[2]/div')
+            # login failed, reload
+            print("login fialure detected, retrying")
+            print(a)
+            time.sleep(100)
+            
+            
+        except: 
+            print("logged in")
+        print("login complete")
+        time.sleep(1)
 
     def autoXP(self):
         driver = self.driver
