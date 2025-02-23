@@ -17,7 +17,7 @@ class Duolingo:
         chrome_options = webdriver.ChromeOptions()
 
         # Comment the line below to switch OFF incognito mode.
-        chrome_options.add_argument("--incognito")
+        #chrome_options.add_argument("--incognito")
         #chrome_options.add_argument("--headless")
         chrome_options.add_argument("--mute-audio")
         # Uncomment the line below to not open a browser window.
@@ -34,6 +34,14 @@ class Duolingo:
         driver = self.driver
         driver.get("https://www.duolingo.com/?isLoggingIn=true")
         time.sleep(2)
+
+        # Countdown from 60, printing every 10 seconds
+        for i in range(20, 0, -10):
+            print(f"{i} seconds remaining")
+            time.sleep(10)
+
+        if True:
+            return
 
         # Hardcoded XPaths.
         driver.find_element("xpath", 
@@ -244,6 +252,8 @@ class Duolingo:
             print("do nothing")
         except UnexpectedAlertPresentException:
             print("weird")
+        
+        print("done")
 
 
 Duo = Duolingo()
