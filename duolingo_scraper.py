@@ -118,8 +118,9 @@ class Duolingo:
             for i in range(1, 7):
                 print(i)
                 driver.find_element("xpath", '/html/body/div[1]/div[1]/div/div/div[3]/div/div/div/button').click()
-                time.sleep(4)
+                time.sleep(5)
 
+            print("propose choice")
             # #propose coice
             a = driver.find_element("xpath", '/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[17]/div/ul/li[1]')
             b = driver.find_element("xpath", '/html/body/div[1]/div[1]/div/div/div[1]/div[1]/div[17]/div/ul/li[2]')
@@ -261,4 +262,4 @@ Duo.loginDuo(username, password)
 
 while True:
     Duo.autoXP()
-    time.sleep(2000)
+    time.sleep(20)
