@@ -244,7 +244,9 @@ class Duolingo:
         except ElementClickInterceptedException:
             print("Done CIE")
         except NoSuchElementException:
-            print("Ok nse")
+            print("Ok nse returning")
+            driver.get("https://www.duolingo.com/learn") #go back and be ready 
+            driver.execute_script("window.onbeforeunload = function() {};")
         except StaleElementReferenceException:
             print("Ok stale")
         except KeyError:
@@ -260,6 +262,27 @@ class Duolingo:
 Duo = Duolingo()
 Duo.loginDuo(username, password)
 
+def read_timeout(filename):
+    try:
+        with open(filename, 'r') as file:
+            timeout = file.readline().strip()
+            return int(timeout)  # Convert to integer
+    except FileNotFoundError:
+        print("Error: File not found.")
+        return None
+    except ValueError:
+        print("Error: Invalid timeout value.")
+        return None
+    
+def countdown(seconds):
+    for remaining in range(seconds, 0, -1):
+        sys.stdout.write(f"\rTime remaining: {remaining} seconds ")
+        sys.stdout.flush()
+        time.sleep(1)
+
+
 while True:
     Duo.autoXP()
-    time.sleep(20)
+    print("sleeping")
+    timeout_value = read_timeout("timeout.txt")
+    countdown(timeout_value)
