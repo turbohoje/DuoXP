@@ -2,7 +2,7 @@
 # Selenium imports.
 from selenium import webdriver
 from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, NoSuchWindowException, StaleElementReferenceException, TimeoutException, UnexpectedAlertPresentException
-import json, os, re, sys, time
+import base64, json, os, re, sys, time
 
 COOKIE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "duo_cookies.json")
 
@@ -136,9 +136,86 @@ class Duolingo:
         self._save_cookies()
         time.sleep(1)
 
+    def _decode_jwt_sub(self):
+        # Duolingo's session cookie is a standard JWT; the user id lives in the
+        # `sub` claim of the middle (payload) segment.
+        cookie = self.driver.get_cookie("jwt_token")
+        if not cookie:
+            raise RuntimeError("no jwt_token cookie; cannot determine user id")
+        payload_b64 = cookie["value"].split(".")[1]
+        payload_b64 += "=" * (-len(payload_b64) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(payload_b64))
+        sub = payload.get("sub")
+        if not sub:
+            raise RuntimeError(f"jwt_token has no `sub` claim: {list(payload)}")
+        return sub
+
+    def _ensure_spanish_course(self):
+        # The active course lives on the user object server-side, not in a
+        # cookie. Read it via the same endpoint the web app uses, and PATCH
+        # back to Spanish if the account has been switched to another course.
+        driver = self.driver
+        # fetch() needs to run on the duolingo.com origin so cookies are sent.
+        if "duolingo.com" not in (driver.current_url or ""):
+            driver.get("https://www.duolingo.com/learn")
+            time.sleep(1)
+
+        sub = self._decode_jwt_sub()
+        base_path = f"/2017-06-30/users/{sub}"
+
+        get_script = """
+            const path = arguments[0];
+            const done = arguments[arguments.length - 1];
+            fetch(path, {credentials: 'include'})
+                .then(r => r.text().then(t => ({status: r.status, body: t})))
+                .then(done)
+                .catch(e => done({error: String(e)}));
+        """
+        resp = driver.execute_async_script(
+            get_script, base_path + "?fields=learningLanguage,fromLanguage"
+        )
+        if resp.get("error") or resp.get("status") != 200:
+            raise RuntimeError(f"could not read user course: {resp}")
+        data = json.loads(resp["body"])
+        current = data.get("learningLanguage")
+        from_lang = data.get("fromLanguage") or "en"
+        if current == "es":
+            print(f"course already set to Spanish (from {from_lang})")
+            return
+
+        print(f"current course is {current!r}; switching to Spanish")
+        patch_script = """
+            const path = arguments[0];
+            const body = arguments[1];
+            const done = arguments[arguments.length - 1];
+            fetch(path, {
+                method: 'PATCH',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body),
+            })
+            .then(r => r.text().then(t => ({status: r.status, body: t})))
+            .then(done)
+            .catch(e => done({error: String(e)}));
+        """
+        result = driver.execute_async_script(
+            patch_script, base_path, {"fromLanguage": from_lang, "learningLanguage": "es"}
+        )
+        if result.get("error") or result.get("status") not in (200, 201, 204):
+            raise RuntimeError(f"could not switch course to Spanish: {result}")
+
+        # Verify the switch actually took.
+        verify = driver.execute_async_script(
+            get_script, base_path + "?fields=learningLanguage"
+        )
+        if verify.get("status") != 200 or json.loads(verify["body"]).get("learningLanguage") != "es":
+            raise RuntimeError(f"course switch did not take: {verify}")
+        print("course switched to Spanish")
+
     def autoXP(self):
         driver = self.driver
 
+        self._ensure_spanish_course()
         driver.get("https://www.duolingo.com/lesson/unit/37/level/2")
         time.sleep(4)
         try:
