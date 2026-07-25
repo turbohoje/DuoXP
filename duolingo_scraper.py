@@ -8,19 +8,22 @@ COOKIE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "duo_cook
 MISSES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "word_match_misses.json")
 
 
-def record_miss(word):
+def record_miss(word, answers):
     # Word-pair misses tell us which entries the `phrases` dict is missing or
     # has wrong. Keyed by the word so the file stays a unique set, with a hit
-    # count so the common ones stand out.
+    # count so the common ones stand out and the leftover on-screen options so
+    # the right translation can be picked out of them.
     try:
         with open(MISSES_FILE) as f:
             misses = json.load(f)
     except (FileNotFoundError, ValueError):
         misses = {}
-    misses[word] = misses.get(word, 0) + 1
+    entry = misses.setdefault(word, {"count": 0, "answers": []})
+    entry["count"] += 1
+    entry["answers"] = sorted(set(entry["answers"]) | set(answers))
     with open(MISSES_FILE, "w") as f:
         json.dump(misses, f, indent=2, ensure_ascii=False, sort_keys=True)
-    print(f"MISS: {word!r} (seen {misses[word]}x)")
+    print(f"MISS: {word!r} (seen {entry['count']}x) options={entry['answers']}")
 
 # Other imports.
 from keys import username, password
@@ -371,27 +374,41 @@ class Duolingo:
                 "romantic":"romántico"
             }
 
-            for i in l:
-                ik = re.sub(r'^\d\n', '', i.text)
-                print("examining " + ik)
-                want = phrases.get(ik)
-                if want is None:
-                    # Not in the dict at all — previously this raised KeyError
-                    # and abandoned the rest of the lesson.
-                    record_miss(ik)
-                    continue
-                for j in r:
-                    jk = re.sub(r'^\d\n', '', j.text)
-                    print("comparing " + jk)
-                    if jk == want:
-                        i.click()
-                        j.click()
-                        print("match")
-                        time.sleep(1)
-                        break
-                else:
-                    # Known word, but its translation wasn't on screen.
-                    record_miss(ik)
+            # Snapshot the right column up front: clicked tokens get removed
+            # from the DOM, so reading their text later goes stale.
+            options = [re.sub(r'^\d\n', '', j.text) for j in r]
+            missed = []
+            paired = set()
+
+            try:
+                for i in l:
+                    ik = re.sub(r'^\d\n', '', i.text)
+                    print("examining " + ik)
+                    want = phrases.get(ik)
+                    if want is None:
+                        # Not in the dict at all — previously this raised
+                        # KeyError and abandoned the rest of the lesson.
+                        missed.append(ik)
+                        continue
+                    for j in r:
+                        jk = re.sub(r'^\d\n', '', j.text)
+                        print("comparing " + jk)
+                        if jk == want:
+                            i.click()
+                            j.click()
+                            print("match")
+                            paired.add(jk)
+                            time.sleep(1)
+                            break
+                    else:
+                        # Known word, but its translation wasn't on screen.
+                        missed.append(ik)
+            finally:
+                # Log whatever we collected even if a stale element aborts the
+                # loop. The unpaired options are the candidate translations.
+                leftover = [o for o in options if o not in paired]
+                for word in missed:
+                    record_miss(word, leftover)
 
             time.sleep(8)
             print("done1")
