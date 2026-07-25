@@ -361,12 +361,18 @@ class Duolingo:
                 "so" : "tan",
                 "really" : "de verdad",
                 "boyfriend" : "novio",
-                "to meet" : "conocer",
-                "I am waiting for": "Estoy esperando a",
+                # Duolingo renders this chunk differently depending on where
+                # it falls in the sentence ("por conocer" mid-sentence vs the
+                # bare infinitive elsewhere) — accept either.
+                "to meet" : ["conocer", "por conocer"],
+                "I am waiting for": ["Estoy esperando a", "estoy esperando"],
                 "interesting": "interesante",
                 "nice to meet you" : "mucho gusto",
                 "friend" : "amiga",
-                "a friend" : "un amigo",
+                # Was "un amigo" (masculine); the on-screen word bank always
+                # pairs this with "una amiga", matching the "friend" -> "amiga"
+                # entry above.
+                "a friend" : "una amiga",
                 "she's going to come" : "va a venir",
                 "is going to come" : "va a venir",
                 "already":"ya",
@@ -375,7 +381,27 @@ class Duolingo:
                 "to propose":"pedir matrimonio",
                 "park":"parque",
                 "weekend":"fin de semana",
-                "romantic":"romántico"
+                "romantic":"romántico",
+                # Added from word_match_misses.json — inferred from the
+                # leftover options that kept accumulating around them.
+                "a lot": "mucho",
+                "at": "en",
+                "can I": "puedo",
+                "ha": "Ja",
+                "hello": "Hola",
+                "her": "su",
+                "here": "aquí",
+                "is": "está",
+                "my": "Mi",
+                "oh": "Ah",
+                "she": "Ella",
+                "she likes him": "A ella le gusta",
+                "sit down": "sentarme",
+                "the park": "el parque",
+                "this": "este",
+                "who": "A quién",
+                "why": "Por qué",
+                "yes": "Sí",
             }
 
             # Snapshot the right column up front: clicked tokens get removed
@@ -394,10 +420,15 @@ class Duolingo:
                         # KeyError and abandoned the rest of the lesson.
                         missed.append(ik)
                         continue
+                    # A key can have multiple acceptable renderings (Duolingo
+                    # capitalizes the first word of a chunk when it starts a
+                    # sentence, and some phrases get split differently
+                    # depending on where they land).
+                    wants = {w.lower() for w in (want if isinstance(want, list) else [want])}
                     for j in r:
                         jk = re.sub(r'^\d\n', '', j.text)
                         print("comparing " + jk)
-                        if jk == want:
+                        if jk.lower() in wants:
                             i.click()
                             j.click()
                             print("match")
