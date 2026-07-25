@@ -5,6 +5,22 @@ from selenium.common.exceptions import ElementClickInterceptedException, NoSuchE
 import base64, json, os, re, sys, time
 
 COOKIE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "duo_cookies.json")
+MISSES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "word_match_misses.json")
+
+
+def record_miss(word):
+    # Word-pair misses tell us which entries the `phrases` dict is missing or
+    # has wrong. Keyed by the word so the file stays a unique set, with a hit
+    # count so the common ones stand out.
+    try:
+        with open(MISSES_FILE) as f:
+            misses = json.load(f)
+    except (FileNotFoundError, ValueError):
+        misses = {}
+    misses[word] = misses.get(word, 0) + 1
+    with open(MISSES_FILE, "w") as f:
+        json.dump(misses, f, indent=2, ensure_ascii=False, sort_keys=True)
+    print(f"MISS: {word!r} (seen {misses[word]}x)")
 
 # Other imports.
 from keys import username, password
@@ -358,14 +374,24 @@ class Duolingo:
             for i in l:
                 ik = re.sub(r'^\d\n', '', i.text)
                 print("examining " + ik)
+                want = phrases.get(ik)
+                if want is None:
+                    # Not in the dict at all — previously this raised KeyError
+                    # and abandoned the rest of the lesson.
+                    record_miss(ik)
+                    continue
                 for j in r:
                     jk = re.sub(r'^\d\n', '', j.text)
                     print("comparing " + jk)
-                    if jk == phrases[ik]:
+                    if jk == want:
                         i.click()
                         j.click()
                         print("match")
                         time.sleep(1)
+                        break
+                else:
+                    # Known word, but its translation wasn't on screen.
+                    record_miss(ik)
 
             time.sleep(8)
             print("done1")
